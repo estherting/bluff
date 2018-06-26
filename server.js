@@ -31,9 +31,5 @@ io.on('connection', function (socket) {
     io.emit('addedPlayer', {players: players});
 
   })
-  // socket.on('enter-game', function(){
-  //   console.log('I am entering gameroom!')
-  //   io.emit('addedPlayer', {players: players});
-  // })
 
 });
