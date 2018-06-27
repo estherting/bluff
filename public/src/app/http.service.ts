@@ -10,12 +10,17 @@ import { Subject } from 'rxjs';
 export class HttpService {
   private socket: SocketIOClient.Socket; // the client instance of socket.io
   private allPlayersSource = new Subject<any>();
+  private gameStateSource = new Subject<any>();
   allPlayers$ = this.allPlayersSource.asObservable();
+  gameState$ = this.gameStateSource.asObservable();
   id: any;
 
 
   constructor(private _http: HttpClient) {
     this.socket = io();
+    // this.socket.on('game_state', function(state){
+    //   this.gameStateSource.next(state)
+    // }.bind(this))
   }
 
   addPlayer(name) {
@@ -48,13 +53,15 @@ export class HttpService {
     this.socket.emit('pass','dummy data')
     console.log('I pass!')
   }
-  playCards(){
-    choosen_card_val = $('#cardvalue').val()
-    console.log(choosen_card_val);
-    socket.emit('play',{
-        choosen_card: choosen_card_val,
+  getState(){
+    this.socket.on('game_state', function(state){
+      this.gameStateSource.next(state)
+    }.bind(this))
+  }
+  playCards(choosen_card, selected_cards){
+    this.socket.emit('play',{
+        choosen_card: choosen_card,
         selected_cards: selected_cards
     })
-    selected_cards = []
   }
 }

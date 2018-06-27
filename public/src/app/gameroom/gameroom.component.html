@@ -11,24 +11,14 @@
   <div class="gameboard">
     <p>All Players:</p>
     <p *ngFor="let player of allPlayers">{{player.name}}</p>
-    <button (click)="play()">Play</button>
+    <button (click)="play()" [disabled]="!isActive">Play</button>
     <button (click)="callBluff()">Call bluff</button>
-    <button (click)="pass()">Pass</button>
+    <button (click)="pass()" [disabled]="!isActive">Pass</button>
+
+    <h3>Showing {{ state.players[myId].name }}'s hand</h3>
     <div id="hand">
-      <div class="card">
-        <p>Ace of Hearts</p>
-      </div>
-      <div class="card">
-        <p>Ace of Spades</p>
-      </div>
-      <div class="card">
-        <p>2 of Spades</p>
-      </div>
-      <div class="card">
-        <p>6 of Clubs</p>
-      </div>
-      <div class="card">
-        <p>Queen of Diamonds</p>
+      <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">
+        <p>{{ card.name }} of {{ card.suit }}</p>
       </div>
     </div>
   </div>
