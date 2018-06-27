@@ -2,16 +2,16 @@
   <div class="announce-join">
     <p>{{allPlayers[allPlayers.length-1]['name']}} joined the game</p>
   </div>
+
   <h1>Gameroom: {{name}}</h1>
   <button *ngIf="isLeader" (click)="startGame()">START</button>
 
-  <a [routerLink]="['/stats']">Show stats</a><br>
   <a [routerLink]="['/splash']">Home</a><br>
 
   <div class="gameboard">
     <p>All Players:</p>
     <p *ngFor="let player of allPlayers">{{player.name}}</p>
-    <select class="" name="" [disabled]="!isActive || curround_card_value" [(ngModel)]="choosen_card">
+    <select [disabled]="!isActive || curround_card_value" [(ngModel)]="choosen_card">
       <option value="1">Ace</option>
       <option value="2">2</option>
       <option value="3">3</option>
