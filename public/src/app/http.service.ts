@@ -11,16 +11,16 @@ export class HttpService {
   private socket: SocketIOClient.Socket; // the client instance of socket.io
   private allPlayersSource = new Subject<any>();
   private gameStateSource = new Subject<any>();
+  private winSource = new Subject<any>();
   allPlayers$ = this.allPlayersSource.asObservable();
   gameState$ = this.gameStateSource.asObservable();
+  win$ = this.winSource.asObservable();
   id: any;
+  winner: any;  // for showing stats
 
 
   constructor(private _http: HttpClient) {
     this.socket = io();
-    // this.socket.on('game_state', function(state){
-    //   this.gameStateSource.next(state)
-    // }.bind(this))
   }
 
   addPlayer(name) {
@@ -33,11 +33,6 @@ export class HttpService {
     this.socket.on("player_list",function(data){
       console.log('got our player list: ', data);
       this.allPlayersSource.next(data)
-      // var cstr = ""
-      // for(let player of data){
-      //     cstr += `<div id = '${player.socketid}'><h1>${player.name}</h1></div>`
-      // }
-      // $('.players').html(cstr)
     }.bind(this))
   }
 
@@ -55,7 +50,10 @@ export class HttpService {
   }
   getState(){
     this.socket.on('game_state', function(state){
-      this.gameStateSource.next(state)
+      this.gameStateSource.next(state);
+      this.winSource.next(state.winner);
+      this.winner = state.winner; // part of showing stats
+      console.log('in the service, i am setting winner', this.winSource)
     }.bind(this))
   }
   playCards(choosen_card, selected_cards){

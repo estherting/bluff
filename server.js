@@ -38,8 +38,9 @@ io.on('connection',function(socket){
     socket.on("player_name",function(name){
         thisPlayer = name
         socket.emit("yourid",socket.id)
-        let newPlayer = new Player(name, socket.id) 
+        let newPlayer = new Player(name, socket.id)
         //if the game isn't on (when gameon is false) then feel free to add a new player to the player
+
         //list, and then have the server let everyone know (emit to all) what the new player_list is 
         if(!bluff.state.gameon){
             console.log(name,"is now playing");
@@ -55,7 +56,7 @@ io.on('connection',function(socket){
             bluff.addWatcher(newPlayer)
             socket.emit("game_state",bluff.state)
         }
-        
+
         //if there is only one player, make him the leader
         // -----------------------> i think this code here might be breaking the game
         if(bluff.state.players[0].socketid == socket.id){
@@ -74,7 +75,7 @@ io.on('connection',function(socket){
     })
 
     //---------------------->this section here deals with the game logic
-    
+
     socket.on('callbluff',function(d){
         console.log("person called bluff");
         let losershand
@@ -118,7 +119,7 @@ io.on('connection',function(socket){
         console.log("person wants to pass");
         if(bluff.state.active_player == recent_hand.player){
             //can change it if we want the player who started the round to go again
-            bluff.state.active_player = (current_round_plays[0].player + 1) % bluff.state.players.length
+            bluff.state.active_player = (bluff.state.curround_plays[0].player + 1) % bluff.state.players.length
             bluff.state.curround_plays = []
             bluff.state.most_recent_hand = {
                 isbluff: false,
@@ -145,7 +146,7 @@ io.on('connection',function(socket){
             bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
             io.emit("game_state",bluff.state)
         }
-       
+
     })
 
     socket.on('play',function(data){
@@ -158,17 +159,16 @@ io.on('connection',function(socket){
         //can do a check here for curround_card_value
         bluff.state.curround_card_value = data.choosen_card
         for(var i in data.selected_cards){
-            curcard = bluff.state.players[bluff.state.active_player].discard(data.selected_cards[i])
+            let curcard = bluff.state.players[bluff.state.active_player].discard(data.selected_cards[i])
             if(curcard.value != bluff.state.curround_card_value){
                 bluff.state.most_recent_hand.isbluff = true;
             }
             bluff.state.most_recent_hand.cards.push(curcard)
         }
+
         bluff.state.most_recent_hand.player = bluff.state.active_player
         bluff.state.curround_plays.push(bluff.state.most_recent_hand)
-
         bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
-
         io.emit("game_state",bluff.state)
     })
 
@@ -177,6 +177,7 @@ io.on('connection',function(socket){
             if(bluff.state.players[i].socketid == socket.id){
                 if(bluff.state.active_player == i){
                     bluff.state.active_player = (bluff.state.active_player +1) % (bluff.state.players.length -1)
+
                 }
                 bluff.state.players.splice(i,1)
                 if(i == 0 && !bluff.state.gameon){
@@ -195,7 +196,7 @@ io.on('connection',function(socket){
 })
 
 function checkwin(state){
-    for(let player of state.players){
+    for(let player of bluff.state.players){
         if(player.hand.length == 0){
             return player
         }
