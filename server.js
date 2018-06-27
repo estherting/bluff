@@ -40,11 +40,12 @@ io.on('connection',function(socket){
         socket.emit("yourid",socket.id)
         let newPlayer = new Player(name, socket.id)
         //if the game isn't on (when gameon is false) then feel free to add a new player to the player
-        //list, and then have the server let everyone know (emit to all) what the new player_list is
-        if(!state.gameon){
+
+        //list, and then have the server let everyone know (emit to all) what the new player_list is 
+        if(!bluff.state.gameon){
             console.log(name,"is now playing");
             bluff.add(newPlayer)
-            io.emit("player_list",players)
+            io.emit("player_list",bluff.state.players)
         //else if the game is on (when gameon is true) then we should update the game watcher list
         //and not add them to the player list
         //unclear if we should just emit to the watcher the game_state, or maybe emit that a new watcher
@@ -53,12 +54,12 @@ io.on('connection',function(socket){
             //pseudo: add player to a list
             console.log(name,"is now watching");
             bluff.addWatcher(newPlayer)
-            socket.emit("game_state",state)
+            socket.emit("game_state",bluff.state)
         }
 
         //if there is only one player, make him the leader
         // -----------------------> i think this code here might be breaking the game
-        if(players[0].socketid == socket.id){
+        if(bluff.state.players[0].socketid == socket.id){
             socket.emit("isleader","hey you are the leader of this game")
         }
     })
@@ -78,12 +79,12 @@ io.on('connection',function(socket){
     socket.on('callbluff',function(d){
         console.log("person called bluff");
         let losershand
-        if(recent_hand.isbluff){
-            losershand = players[recent_hand.player].hand
+        if(bluff.state.most_recent_hand.isbluff){
+            losershand = bluff.state.players[bluff.state.most_recent_hand.player].hand
 
         }else{
-            losershand = players[state.active_player].hand
-            state.active_player = recent_hand.player
+            losershand = bluff.state.players[bluff.state.active_player].hand
+            bluff.state.active_player = bluff.state.most_recent_hand.player
         }
         for(var play of current_round_plays){
             losershand.push.apply(losershand, play.cards)
@@ -105,10 +106,10 @@ io.on('connection',function(socket){
             bluff.state.winner = winner
             io.emit("game_state",bluff.state)
             bluff.endGame()
-            io.emit("player_list",players)
+            io.emit("player_list",bluff.state.players)
             //marked for later
-            if(players[0]){
-                socket.broadcast.to(players[0].socketid).emit("isleader","hey you are the leader of this game")
+            if(bluff.state.players[0]){
+                socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
             }
         }else{
             io.emit("game_state",bluff.state)
@@ -118,7 +119,7 @@ io.on('connection',function(socket){
         console.log("person wants to pass");
         if(bluff.state.active_player == recent_hand.player){
             //can change it if we want the player who started the round to go again
-            bluff.state.active_player = (bluff.state.curround_plays[0].player + 1) % players.length
+            bluff.state.active_player = (bluff.state.curround_plays[0].player + 1) % bluff.state.players.length
             bluff.state.curround_plays = []
             bluff.state.most_recent_hand = {
                 isbluff: false,
@@ -133,16 +134,16 @@ io.on('connection',function(socket){
                 bluff.state.winner = winner
                 io.emit("game_state",bluff.state)
                 bluff.endGame()
-                io.emit("player_list",players)
+                io.emit("player_list",bluff.state.players)
                 //marked for later observation
-                if(players[0]){
-                    socket.broadcast.to(players[0].socketid).emit("isleader","hey you are the leader of this game")
+                if(bluff.state.players[0]){
+                    socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
                 }
             }else{
                 io.emit("game_state",bluff.state)
             }
         }else{
-            bluff.state.active_player = (bluff.state.active_player + 1) % players.length
+            bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
             io.emit("game_state",bluff.state)
         }
 
@@ -158,29 +159,29 @@ io.on('connection',function(socket){
         //can do a check here for curround_card_value
         bluff.state.curround_card_value = data.choosen_card
         for(var i in data.selected_cards){
-            let curcard = bluff.state.players[state.active_player].discard(data.selected_cards[i])
+            let curcard = bluff.state.players[bluff.state.active_player].discard(data.selected_cards[i])
             if(curcard.value != bluff.state.curround_card_value){
                 bluff.state.most_recent_hand.isbluff = true;
             }
             bluff.state.most_recent_hand.cards.push(curcard)
         }
-        bluff.state.most_recent_hand.player = state.active_player
+
+        bluff.state.most_recent_hand.player = bluff.state.active_player
         bluff.state.curround_plays.push(bluff.state.most_recent_hand)
-
-        bluff.state.active_player = (bluff.state.active_player + 1) % players.length
-
+        bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
         io.emit("game_state",bluff.state)
     })
 
     socket.on('disconnect',function(){
-        for(let i in players){
-            if(players[i].socketid == socket.id){
+        for(let i in bluff.state.players){
+            if(bluff.state.players[i].socketid == socket.id){
                 if(bluff.state.active_player == i){
-                    bluff.state.active_player = (bluff.state.active_player +1) % (players.length -1)
+                    bluff.state.active_player = (bluff.state.active_player +1) % (bluff.state.players.length -1)
+
                 }
-                players.splice(i,1)
+                bluff.state.players.splice(i,1)
                 if(i == 0 && !bluff.state.gameon){
-                    socket.broadcast.to(players[0].socketid).emit("isleader","hey you are the leader of this game")
+                    socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
                 }
                 break;
             }
@@ -189,7 +190,7 @@ io.on('connection',function(socket){
         if(bluff.state.gameon){
             io.emit("game_state",bluff.state)
         }else{
-            io.emit("player_list",players)
+            io.emit("player_list",bluff.state.players)
         }
     })
 })
