@@ -10,8 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class GameroomComponent implements OnInit {
   name = ""
   myId: number;
-  socketId: "";
-  allPlayers = [{name: ""}];
+  socketId: string;
+  allPlayers = [];
   isLeader = false;
   selected_cards = [];
   choosen_card = 1;
@@ -27,13 +27,13 @@ export class GameroomComponent implements OnInit {
       for(let i in this.allPlayers){
         if(this.allPlayers[i].name == this.name){
           this.myId = Number(i);
-          this.socketId = this.allPlayers[i].socketid;
+          this.socketId = this.allPlayers[i]['socketid'];
         }
       }
       console.log('my ID is: ', this.myId);
       console.log('my SocketID is: ', this.socketId);
       // am I the leader?
-      if(this.allPlayers[0].socketid == this.socketId){
+      if(this.allPlayers[0]['socketid'] == this.socketId){
         this.isLeader = true;
       }
     })
