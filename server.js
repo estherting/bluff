@@ -38,9 +38,9 @@ io.on('connection',function(socket){
     socket.on("player_name",function(name){
         thisPlayer = name
         socket.emit("yourid",socket.id)
-        let newPlayer = new Player(name, socket.id) 
+        let newPlayer = new Player(name, socket.id)
         //if the game isn't on (when gameon is false) then feel free to add a new player to the player
-        //list, and then have the server let everyone know (emit to all) what the new player_list is 
+        //list, and then have the server let everyone know (emit to all) what the new player_list is
         if(!state.gameon){
             console.log(name,"is now playing");
             bluff.add(newPlayer)
@@ -55,7 +55,7 @@ io.on('connection',function(socket){
             bluff.addWatcher(newPlayer)
             socket.emit("game_state",state)
         }
-        
+
         //if there is only one player, make him the leader
         // -----------------------> i think this code here might be breaking the game
         if(players[0].socketid == socket.id){
@@ -74,7 +74,7 @@ io.on('connection',function(socket){
     })
 
     //---------------------->this section here deals with the game logic
-    
+
     socket.on('callbluff',function(d){
         console.log("person called bluff");
         let losershand
@@ -145,7 +145,7 @@ io.on('connection',function(socket){
             state.active_player = (state.active_player + 1) % players.length
             io.emit("game_state",bluff.state)
         }
-       
+
     })
 
     socket.on('play',function(data){
