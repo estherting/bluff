@@ -131,7 +131,7 @@ class Bluff {
             player.drophand()
         }
     }
-    
+
 }
 
 module.exports = {
