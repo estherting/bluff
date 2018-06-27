@@ -24,7 +24,7 @@ export class GameroomComponent implements OnInit {
       this.allPlayers = data;
       for(let i in this.allPlayers){
         if(this.allPlayers[i].name == this.name){
-          this.myId = i;
+          this.myId = Number(i);
         }
       }
       console.log('my ID is: ', this.myId);
@@ -35,7 +35,7 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
-      if(this.state.active_player == this.myId){
+      if(this.state['active_player'] == this.myId){
         this.isActive = true;
       } else {
         this.isActive = false;

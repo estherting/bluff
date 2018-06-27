@@ -1,9 +1,10 @@
 class Card{
-    constructor(suit, name, value, cardid){
+    constructor(suit, name, value, cardid, img){
         this.suit = suit
         this.name = name
         this.value = value
         this.cardid = cardid
+        this.img = img
     }
     show() {
         console.log("Suit: " + this.suit + ", Name: " + this.name + ", value: " + this.value)
@@ -31,7 +32,7 @@ class Deck{
         let suits = ["Hearts", "Clubs", "Spades", "Diamonds"]
         suits.forEach(suit=>{
             names.forEach((name,idx)=>{
-                let newCard = new Card(suit, name, idx + 1, startid)
+                let newCard = new Card(suit, name, idx + 1, startid, (idx+1) + suit[0])
                 results.push(newCard)
                 startid++;
             }
