@@ -11,8 +11,10 @@ export class HttpService {
   private socket: SocketIOClient.Socket; // the client instance of socket.io
   private allPlayersSource = new Subject<any>();
   private gameStateSource = new Subject<any>();
+  private winSource = new Subject<any>();
   allPlayers$ = this.allPlayersSource.asObservable();
   gameState$ = this.gameStateSource.asObservable();
+  win$ = this.winSource.asObservable();
   id: any;
 
 
@@ -62,6 +64,11 @@ export class HttpService {
     this.socket.emit('play',{
         choosen_card: choosen_card,
         selected_cards: selected_cards
+    })
+  }
+  winner(){
+    this.socket.on('winnner', function(winner){
+      this.winSource.next(winner)
     })
   }
 }
