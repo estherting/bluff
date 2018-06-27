@@ -99,7 +99,11 @@ io.on('connection',function(socket){
         //io.emit("game_state",bluff.state)
         let winner = checkwin(bluff.state)
         if(winner){
-            io.emit("winner",winner)
+            //io.emit("winner",winner)
+            //instead lets update the game state
+            //may have to remove winner on reset
+            bluff.state.winner = winner
+            io.emit("game_state",bluff.state)
             bluff.endGame()
             io.emit("player_list",players)
             //marked for later
@@ -122,9 +126,12 @@ io.on('connection',function(socket){
                 player:null
             }
             bluff.state.curround_card_value = null
-             let winner = checkwin(bluff.state)
+            let winner = checkwin(bluff.state)
             if(winner){
-                io.emit("winner",winner)
+                //io.emit("winner",winner)
+                //instead lets add winner to the game state
+                bluff.state.winner = winner
+                io.emit("game_state",bluff.state)
                 bluff.endGame()
                 io.emit("player_list",players)
                 //marked for later observation

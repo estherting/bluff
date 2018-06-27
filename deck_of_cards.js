@@ -88,7 +88,8 @@ class Bluff {
             curround_card_value: null,
             gameon: false,
             //use players index to find the active player
-            active_player: null
+            active_player: null,
+            winner:null
         }
     }
     add(player){
@@ -125,6 +126,7 @@ class Bluff {
         this.state.curround_card_value = null
         this.state.gameon = false
         this.state.active_player = null
+        this.state.winner = null
         for(let player of this.state.players){
             player.drophand()
         }
