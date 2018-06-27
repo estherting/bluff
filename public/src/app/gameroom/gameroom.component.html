@@ -1,0 +1,35 @@
+<div>
+  <div class="announce-join">
+    <p>{{allPlayers[allPlayers.length-1]['name']}} joined the game</p>
+  </div>
+  <h1>Gameroom: {{name}}</h1>
+  <button *ngIf="isLeader" (click)="startGame()">START</button>
+
+  <a [routerLink]="['/stats']">Show stats</a><br>
+  <a [routerLink]="['/splash']">Home</a><br>
+
+  <div class="gameboard">
+    <p>All Players:</p>
+    <p *ngFor="let player of allPlayers">{{player.name}}</p>
+    <button (click)="play()">Play</button>
+    <button (click)="callBluff()">Call bluff</button>
+    <button (click)="pass()">Pass</button>
+    <div id="hand">
+      <div class="card">
+        <p>Ace of Hearts</p>
+      </div>
+      <div class="card">
+        <p>Ace of Spades</p>
+      </div>
+      <div class="card">
+        <p>2 of Spades</p>
+      </div>
+      <div class="card">
+        <p>6 of Clubs</p>
+      </div>
+      <div class="card">
+        <p>Queen of Diamonds</p>
+      </div>
+    </div>
+  </div>
+</div>
