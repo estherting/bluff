@@ -1,0 +1,15 @@
+.card {
+  border: 1px solid black;
+  width: 100px;
+  height: 200px;
+  margin: 20px;
+  display: inline-block;
+  vertical-align: top
+}
+
+.gameboard {
+  border: 1px solid black;
+  width: 900px;
+  height: 450px;
+  padding: 50px;
+}
