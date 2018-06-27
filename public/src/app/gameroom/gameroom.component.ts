@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class GameroomComponent implements OnInit {
   name = ""
-  myId: number;
+  myId: string;
   allPlayers = [{name: ""}];
   isLeader = false;
   selected_cards = [];
@@ -36,6 +36,7 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
+
       // am I the active player?
       if(this.state['active_player'] == this.myId){
         this.isActive = true;
