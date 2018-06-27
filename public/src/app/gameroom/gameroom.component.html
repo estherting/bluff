@@ -1,14 +1,48 @@
-<div>
+<div id="main">
   <div class="announce-join">
     <p>{{allPlayers[allPlayers.length-1]['name']}} joined the game</p>
   </div>
 
-  <h1>Gameroom: {{name}}</h1>
-  <button *ngIf="isLeader" (click)="startGame()">START</button>
-
-  <a [routerLink]="['/splash']">Home</a><br>
-
+  <div id="nav">
+    <h1>Welcome {{name}}</h1>
+    <a [routerLink]="['/stats']" class="simple">Show stats</a>
+    <a [routerLink]="['/splash']" class="simple">Home</a>
+    <button *ngIf="isLeader" (click)="startGame()" class="button button-red">START GAME</button>
+  </div>
   <div class="gameboard">
+
+    <div id="p1">
+        <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
+        <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+        <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+        <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+    </div><div 
+    id="p2">
+        <div id="cards">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+        </div>
+    </div><div            
+    id="table">
+        <div id="cards">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+        </div>
+    </div><div
+    id="p3">
+        <div id="cards">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+            <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+        </div>
+    </div>            
+
+
     <p>All Players:</p>
     <p *ngFor="let player of allPlayers">{{player.name}}</p>
     <select [disabled]="!isActive || curround_card_value" [(ngModel)]="choosen_card">
@@ -31,10 +65,20 @@
     <button (click)="pass()" [disabled]="!isActive">Pass</button>
 
     <h3>Showing {{ state.players[myId].name }}'s hand</h3>
+
     <div id="hand">
-      <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">
-        <p>{{ card.name }} of {{ card.suit }}</p>
-      </div>
+        <img *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
+      <!-- <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">
+        <p>{{ card.name }} of {{ card.suit }} - {{ card.img }}</p>
+      </div> -->
+    </div>
+    <div id="actions">
+     <!--  <p *ngFor="let player of allPlayers">{{player.name}}</p> -->
+      <button (click)="play()" [disabled]="!isActive" data-icon="♚" class="button button-green">Play</button>
+      <button (click)="callBluff()" data-icon="♛" class="button button-red">Call bluff</button>
+      <button (click)="pass()" [disabled]="!isActive" class="button button-blue" >Pass</button>
+
+      <!-- <h3>Showing {{ state.players[myId].name }}'s hand</h3> -->
     </div>
   </div>
 </div>
