@@ -24,6 +24,7 @@ export class GameroomComponent implements OnInit {
 
   display_selected:any;
   card_names = ['dummy','aces','twos','threes','fours','fives','sixs','sevens','eights','nines','tens','jacks','queens','kings'];
+  cards_in_pile:number;
 
 
   constructor(private _httpService: HttpService, private _router: Router) {
@@ -50,6 +51,11 @@ export class GameroomComponent implements OnInit {
         }
       }
       // is there a winner?
+      let cards_in_pile_state = 0;
+      for(let i of state.curround_plays){
+        cards_in_pile_state += i.cards.length
+      }
+      this.cards_in_pile = cards_in_pile_state
       if (state.winner) {
         console.log('WE GOT A WINNER!!!!!', state.winner);
         this.winner = state.winner;
@@ -117,6 +123,7 @@ export class GameroomComponent implements OnInit {
     this._httpService.playCards(this.choosen_card, this.selected_cards);
     console.log('I chose this card value:', this.choosen_card);
     this.selected_cards = [];
+    this.display_selected = {};
     this._httpService.getState();
   }
 }
