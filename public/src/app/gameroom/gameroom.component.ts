@@ -20,6 +20,7 @@ export class GameroomComponent implements OnInit {
   winner: any;
   display_selected: any;
   player_hand: any;
+  play_history = [];
 
 
   constructor(private _httpService: HttpService, private _router: Router) {
@@ -39,6 +40,7 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
+      this.play_history = state['game_history'];
       for (const player of this.state.players) {
         if (player['socketid'] == this.socketId) {
           this.player_hand = player.hand;
@@ -93,18 +95,18 @@ export class GameroomComponent implements OnInit {
     for(var i of this.selected_cards){
       console.log("i:",i);
       if (i == id){
-        in_selected = true;this.display_selected[id]=true;
+        in_selected = true;this.display_selected[id] = true;
       }
     }
-    if(in_selected){
+    if (in_selected){
       var index = this.selected_cards.indexOf(id)
-      if(index > -1){
+      if (index > -1){
         this.selected_cards.splice(index, 1);
         this.display_selected[id] = false;
       }
       console.log('removed card from selected. updated selection: ', this.selected_cards);
     } else {
-      this.selected_cards.push(id);this.display_selected[id] = true;
+      this.selected_cards.push(id); this.display_selected[id] = true;
       console.log('Ive selected these cards: ', this.selected_cards)
     }
   }

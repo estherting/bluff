@@ -53,8 +53,13 @@ io.on('connection',function(socket){
         }else{
             //pseudo: add player to a list
             console.log(name,"is now watching");
-            bluff.addWatcher(newPlayer)
-            socket.emit("game_state",bluff.state)
+            bluff.addWatcher(newPlayer);
+            let message = name + ' started watching the game';
+            let game_hist = {
+                message : message
+            }
+            bluff.state.game_history.push(game_hist); 
+            socket.emit("game_state",bluff.state);
         }
 
         //if there is only one player, make him the leader
@@ -71,6 +76,18 @@ io.on('connection',function(socket){
     //then emit the new game_state
     socket.on('startgame',function(d){
         bluff.start()
+        let message = 'Game has started';
+        let game_hist = {
+            message: message
+        }
+        bluff.state.game_history.push(game_hist);
+        for(let player of bluff.state.players){
+            let message = player.name + ' is playing';
+            let game_hist = {
+                message: message
+            }
+            bluff.state.game_history.push(game_hist);    
+        } 
         io.emit("game_state",bluff.state)
     })
 
@@ -78,12 +95,26 @@ io.on('connection',function(socket){
 
     socket.on('callbluff',function(d){
         console.log("person called bluff");
+        let message = bluff.state.players[bluff.state.active_player].name + ' has called bluff';
+        let game_hist = {
+            message: message
+        }
+        bluff.state.game_history.push(game_hist);
         let losershand = [];
         if(bluff.state.most_recent_hand.isbluff){
             losershand = bluff.state.players[bluff.state.most_recent_hand.player].hand
-
+            let message = bluff.state.players[bluff.state.most_recent_hand.player].name + ' was called out on his bluff';
+            let game_hist = {
+                message: message
+            }
+            bluff.state.game_history.push(game_hist);
         }else{
             losershand = bluff.state.players[bluff.state.active_player].hand
+            let message = bluff.state.players[bluff.state.active_player].name + ' was wrong';
+            let game_hist = {
+                message: message
+            }
+            bluff.state.game_history.push(game_hist);
             bluff.state.active_player = bluff.state.most_recent_hand.player
         }
         for (var play of bluff.state.curround_plays){
@@ -117,6 +148,11 @@ io.on('connection',function(socket){
     })
     socket.on('pass',function(d){
         console.log("person wants to pass");
+        let message = bluff.state.players[bluff.state.active_player].name + ' has Passed';
+        let game_hist = {
+            message: message
+        }
+        bluff.state.game_history.push(game_hist);
         if (bluff.state.active_player == bluff.state.most_recent_hand.player){
             //can change it if we want the player who started the round to go again
             bluff.state.active_player = (bluff.state.curround_plays[0].player + 1) % bluff.state.players.length
@@ -170,6 +206,12 @@ io.on('connection',function(socket){
 
         bluff.state.most_recent_hand.player = bluff.state.active_player
         bluff.state.curround_plays.push(bluff.state.most_recent_hand)
+        let message = bluff.state.players[bluff.state.active_player].name + ' has played ';
+        message = message + data.selected_cards.length + ' ' + bluff.state.curround_card_value;
+        let game_hist = {
+            message: message
+        }
+        bluff.state.game_history.push(game_hist);
         bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
         io.emit("game_state",bluff.state)
     })
@@ -181,7 +223,12 @@ io.on('connection',function(socket){
                     bluff.state.active_player = (bluff.state.active_player +1) % (bluff.state.players.length -1)
 
                 }
-                bluff.state.players.splice(i,1)
+                
+                let message = bluff.state.players.splice(i, 1)[0].name + ' has left the game';
+                let game_hist = {
+                    message: message
+                }
+                bluff.state.game_history.push(game_hist); 
                 if(i == 0 && !bluff.state.gameon){
                     socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
                 }
@@ -198,7 +245,7 @@ io.on('connection',function(socket){
 })
 
 function checkwin(state){
-    for(let player of bluff.state.players){
+    for(let player of state.players){
         if(player.hand.length == 0){
             return player
         }

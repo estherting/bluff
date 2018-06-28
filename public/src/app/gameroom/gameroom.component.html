@@ -71,4 +71,7 @@
       <!-- <h3>Showing {{ state.players[myId].name }}'s hand</h3> -->
     </div>
   </div>
+  <div class="playhistory">
+    <p *ngFor = 'let play of play_history'> {{ play['message']  }}</p>
+  </div>
 </div>

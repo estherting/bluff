@@ -89,7 +89,8 @@ class Bluff {
             gameon: false,
             //use players index to find the active player
             active_player: null,
-            winner:null
+            winner:null,
+            game_history: []
         }
     }
     add(player){
