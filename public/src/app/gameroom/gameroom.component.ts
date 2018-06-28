@@ -20,11 +20,10 @@ export class GameroomComponent implements OnInit {
   winner: any;
   player_hand: any;
   play_history = [];
-
-
-  display_selected:any;
-  card_names = ['dummy','aces','twos','threes','fours','fives','sixs','sevens','eights','nines','tens','jacks','queens','kings'];
-  cards_in_pile:number;
+  display_selected: any;
+  card_names = ['dummy', 'aces', 'twos', 'threes', 'fours', 'fives', 'sixs', 'sevens', 'eights', 'nines', 'tens', 'jacks',
+      'queens', 'kings'];
+  cards_in_pile: number;
 
 
   constructor(private _httpService: HttpService, private _router: Router) {
@@ -44,7 +43,10 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
-      this.play_history = state['game_history'];
+      for (let i = (state['game_history'].length - 1) ;  i >= 0 ; i--) {
+        this.play_history.push(state['game_history'][i]);
+      }
+      // this.play_history = state['game_history'].reverse();
       for (const player of this.state.players) {
         if (player['socketid'] == this.socketId) {
           this.player_hand = player.hand;
@@ -52,10 +54,10 @@ export class GameroomComponent implements OnInit {
       }
       // is there a winner?
       let cards_in_pile_state = 0;
-      for(let i of state.curround_plays){
-        cards_in_pile_state += i.cards.length
+      for (const i of state.curround_plays) {
+        cards_in_pile_state += i.cards.length;
       }
-      this.cards_in_pile = cards_in_pile_state
+      this.cards_in_pile = cards_in_pile_state;
       if (state.winner) {
         console.log('WE GOT A WINNER!!!!!', state.winner);
         this.winner = state.winner;
@@ -101,22 +103,22 @@ export class GameroomComponent implements OnInit {
   }
   selectCard(id) {
     let in_selected = false;
-    for(var i of this.selected_cards){
-      console.log("i:",i);
-      if (i == id){
-        in_selected = true;this.display_selected[id] = true;
+    for (const i of this.selected_cards) {
+      console.log('i:', i);
+      if (i == id) {
+        in_selected = true; this.display_selected[id] = true;
       }
     }
-    if (in_selected){
-      var index = this.selected_cards.indexOf(id)
-      if (index > -1){
+    if (in_selected) {
+      const index = this.selected_cards.indexOf(id);
+      if (index > -1) {
         this.selected_cards.splice(index, 1);
         this.display_selected[id] = false;
       }
       console.log('removed card from selected. updated selection: ', this.selected_cards);
     } else {
       this.selected_cards.push(id); this.display_selected[id] = true;
-      console.log('Ive selected these cards: ', this.selected_cards)
+      console.log('Ive selected these cards: ', this.selected_cards);
     }
   }
   play() {
