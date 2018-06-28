@@ -9,6 +9,10 @@
 #nav a{
   display: inline-block;
 }
+#nav h1{
+  color:whitesmoke;
+  text-shadow: 1px 1px 1px black;
+}
 #hand{
   text-align: center;
 }
