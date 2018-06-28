@@ -113,6 +113,7 @@ class Bluff {
         this.deal()
         this.state.gameon = true;
         this.state.active_player = 0;
+        this.state.winner = null;
     }
     endGame(){
         this.startid = 0;
@@ -126,7 +127,6 @@ class Bluff {
         this.state.curround_card_value = null
         this.state.gameon = false
         this.state.active_player = null
-        this.state.winner = null
         for(let player of this.state.players){
             player.drophand()
         }

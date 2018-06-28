@@ -78,7 +78,7 @@ io.on('connection',function(socket){
 
     socket.on('callbluff',function(d){
         console.log("person called bluff");
-        let losershand
+        let losershand = [];
         if(bluff.state.most_recent_hand.isbluff){
             losershand = bluff.state.players[bluff.state.most_recent_hand.player].hand
 
@@ -86,7 +86,7 @@ io.on('connection',function(socket){
             losershand = bluff.state.players[bluff.state.active_player].hand
             bluff.state.active_player = bluff.state.most_recent_hand.player
         }
-        for(var play of current_round_plays){
+        for (var play of bluff.state.curround_plays){
             losershand.push.apply(losershand, play.cards)
         }
         //consider turning this into a function for more readability later
@@ -117,7 +117,7 @@ io.on('connection',function(socket){
     })
     socket.on('pass',function(d){
         console.log("person wants to pass");
-        if(bluff.state.active_player == recent_hand.player){
+        if (bluff.state.active_player == bluff.state.most_recent_hand.player){
             //can change it if we want the player who started the round to go again
             bluff.state.active_player = (bluff.state.curround_plays[0].player + 1) % bluff.state.players.length
             bluff.state.curround_plays = []
@@ -156,8 +156,10 @@ io.on('connection',function(socket){
             cards:[],
             player:null
         }
-        //can do a check here for curround_card_value
-        bluff.state.curround_card_value = data.choosen_card
+        //Check to see if the current round card value has been already set. If not, then set it.
+        if (!bluff.state.curround_card_value){
+            bluff.state.curround_card_value = data.choosen_card
+        }
         for(var i in data.selected_cards){
             let curcard = bluff.state.players[bluff.state.active_player].discard(data.selected_cards[i])
             if(curcard.value != bluff.state.curround_card_value){
