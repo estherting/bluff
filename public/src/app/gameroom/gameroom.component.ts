@@ -41,8 +41,8 @@ export class GameroomComponent implements OnInit {
       console.log('subscribing to game state', state);
       this.state = state;
       // is there a winner?
-      console.log('WE GOT A WINNER!!!!!', state.winner);
       if (state.winner) {
+        console.log('WE GOT A WINNER!!!!!', state.winner);
         this.winner = state.winner;
         this._router.navigate(['/stats']);
       }
