@@ -20,6 +20,7 @@ export class GameroomComponent implements OnInit {
   curround_card_value: number;
   winner: any;
   display_selected:any;
+  canCallBluff: false;
 
   constructor(private _httpService: HttpService, private _router: Router) {
     _httpService.allPlayers$.subscribe(data => {
@@ -109,6 +110,9 @@ export class GameroomComponent implements OnInit {
     console.log('I chose this card value:', this.choosen_card);
     this.selected_cards = [];
     this._httpService.getState();
+  }
+  callBluffButton(){
+    
   }
 
 }
