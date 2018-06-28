@@ -11,14 +11,22 @@
   </div>
   <div class="gameboard">
 
-    <div id="p1">
+    <div id="p1" [ngClass]="{'current-player': ((2 + myId) % state.players.length == state.active_player)}">
+        <div class="player-info">
+          <p>{{ state.players[(2 + myId) % state.players.length].name }}</p>
+          <p>{{ state.players[(2 + myId) % state.players.length].hand.length }} cards remaining</p>
+        </div>
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
     </div><div 
     id="p2">
-        <div id="cards">
+        <div id="cards" [ngClass]="{'current-player': ((1 + myId) % state.players.length == state.active_player)}">
+            <div class="player-info">
+              <p>{{ state.players[(1 + myId) % state.players.length].name }}</p>
+              <p>{{ state.players[(1 + myId) % state.players.length].hand.length }} cards remaining</p>
+            </div>
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
@@ -34,13 +42,20 @@
         </div>
     </div><div
     id="p3">
-        <div id="cards">
+        <div id="cards" [ngClass]="{'current-player': ((3 + myId) % state.players.length == state.active_player)}">
+            <div class="player-info">
+              <p>{{ state.players[(3 + myId) % state.players.length].name }}</p>
+              <p>{{ state.players[(3 + myId) % state.players.length].hand.length }} cards remaining</p>
+            </div>
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         </div>
-    </div>            
+    </div><div *ngIf="state.gameon" id="current-info">
+        <p *ngIf="curround_card_value">Now playing {{ card_names[curround_card_value] }}...</p>
+        <p *ngIf="!curround_card_value">Waiting for a card to be selected...</p>
+      </div>            
     <div id="hand">
         <img *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
       <!-- <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">

@@ -59,7 +59,7 @@ io.on('connection',function(socket){
 
         //if there is only one player, make him the leader
         // -----------------------> i think this code here might be breaking the game
-        if(bluff.state.players[0].socketid == socket.id){
+        if(bluff.state.players.length && bluff.state.players[0].socketid == socket.id){
             socket.emit("isleader","hey you are the leader of this game")
         }
     })
