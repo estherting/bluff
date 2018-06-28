@@ -14,6 +14,7 @@ export class SplashComponent implements OnInit {
   allPlayers = [];
   joined = false;
   isLeader = false;
+  gameStarted = false;
   /* table:any;
 
   camera:any
@@ -53,5 +54,10 @@ export class SplashComponent implements OnInit {
   joinGame(){
     this.joined = true;
     this._httpService.addPlayer(this.playerName);
+  }
+  startGame() {
+    // this.isLeader = false;
+    this._httpService.startGame();
+    this._httpService.getState();
   }
 }

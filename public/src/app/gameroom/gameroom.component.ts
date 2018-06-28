@@ -72,8 +72,6 @@ export class GameroomComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.name = prompt('What is your name?');
-    this.addPlayer(this.name);
     this.display_selected = {};
   }
   addPlayer(name) {
