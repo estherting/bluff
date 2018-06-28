@@ -25,41 +25,41 @@ export class HttpService {
 
   addPlayer(name) {
     this.socket.emit('player_name', name);
-    this.socket.on('yourid',(socketid)=>{
-      this.id = socketid
+    this.socket.on('yourid', (socketid) => {
+      this.id = socketid;
       console.log(this.id);
-    })
+    });
 
-    this.socket.on("player_list",function(data){
+    this.socket.on('player_list', function(data) {
       console.log('got our player list: ', data);
-      this.allPlayersSource.next(data)
-    }.bind(this))
+      this.allPlayersSource.next(data);
+    }.bind(this));
   }
 
-  startGame(){
-    this.socket.emit("startgame","whatever data here")
-    console.log('starting game!')
+  startGame() {
+    this.socket.emit('startgame', 'whatever data here');
+    console.log('starting game!');
   }
-  callBluff(){
-    this.socket.emit('callbluff','dummy data')
-    console.log('calling bluff!')
+  callBluff() {
+    this.socket.emit('callbluff', 'dummy data');
+    console.log('calling bluff!');
   }
-  pass(){
-    this.socket.emit('pass','dummy data')
-    console.log('I pass!')
+  pass() {
+    this.socket.emit('pass', 'dummy data');
+    console.log('I pass!');
   }
-  getState(){
-    this.socket.on('game_state', function(state){
+  getState() {
+    this.socket.on('game_state', function(state) {
       this.gameStateSource.next(state);
       this.winSource.next(state.winner);
       this.winner = state.winner; // part of showing stats
-      console.log('in the service, i am setting winner', this.winSource)
-    }.bind(this))
+      console.log('in the service, i am setting winner', this.winSource);
+    }.bind(this));
   }
-  playCards(choosen_card, selected_cards){
-    this.socket.emit('play',{
+  playCards(choosen_card, selected_cards) {
+    this.socket.emit('play', {
         choosen_card: choosen_card,
         selected_cards: selected_cards
-    })
+    });
   }
 }
