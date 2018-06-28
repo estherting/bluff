@@ -35,13 +35,15 @@ io.on('connection',function(socket){
     //So over here we are getting the player name, and storing it in this socket connection
     //we also send the socket.id back to the client so that he knows what his socket.id is.
     //we will use the socket.id later for comparing users.
+    io.emit("player_list",bluff.state.players)
+
     socket.on("player_name",function(name){
         thisPlayer = name
         socket.emit("yourid",socket.id)
         let newPlayer = new Player(name, socket.id)
         //if the game isn't on (when gameon is false) then feel free to add a new player to the player
 
-        //list, and then have the server let everyone know (emit to all) what the new player_list is 
+        //list, and then have the server let everyone know (emit to all) what the new player_list is
         if(!bluff.state.gameon){
             console.log(name,"is now playing");
             bluff.add(newPlayer)
@@ -58,7 +60,7 @@ io.on('connection',function(socket){
             let game_hist = {
                 message : message
             }
-            bluff.state.game_history.push(game_hist); 
+            bluff.state.game_history.push(game_hist);
             socket.emit("game_state",bluff.state);
         }
 
@@ -86,8 +88,8 @@ io.on('connection',function(socket){
             let game_hist = {
                 message: message
             }
-            bluff.state.game_history.push(game_hist);    
-        } 
+            bluff.state.game_history.push(game_hist);
+        }
         io.emit("game_state",bluff.state)
     })
 
@@ -223,12 +225,12 @@ io.on('connection',function(socket){
                     bluff.state.active_player = (bluff.state.active_player +1) % (bluff.state.players.length -1)
 
                 }
-                
+
                 let message = bluff.state.players.splice(i, 1)[0].name + ' has left the game';
                 let game_hist = {
                     message: message
                 }
-                bluff.state.game_history.push(game_hist); 
+                bluff.state.game_history.push(game_hist);
                 if(i == 0 && !bluff.state.gameon){
                     socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
                 }
