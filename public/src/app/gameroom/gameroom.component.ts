@@ -20,7 +20,7 @@ export class GameroomComponent implements OnInit {
   curround_card_value: number;
   winner: any;
   display_selected:any;
-  canCallBluff = false;
+
 
   constructor(private _httpService: HttpService, private _router: Router) {
     _httpService.allPlayers$.subscribe(data => {
@@ -59,12 +59,6 @@ export class GameroomComponent implements OnInit {
         console.log('I am resetting curround_card_value: ', this.curround_card_value);
       } else {
         this.curround_card_value = null;
-      }
-      // can I call bluff?
-      if((this.state['active_player']+1)%this.state['players'].length == this.myId){
-        this.canCallBluff = true;
-      } else {
-        this.canCallBluff = false;
       }
     });
   }

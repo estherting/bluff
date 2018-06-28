@@ -65,7 +65,7 @@
       <option value="13">King</option>
     </select>
       <button (click)="play()" [disabled]="!isActive" data-icon="♚" class="button button-green">Play</button>
-      <button (click)="callBluff()" [disabled]="!canCallBluff" data-icon="♛" class="button button-red">Call bluff</button>
+      <button (click)="callBluff()" [disabled]="!isActive" data-icon="♛" class="button button-red">Call bluff</button>
       <button (click)="pass()" [disabled]="!isActive" class="button button-blue" >Pass</button>
 
       <!-- <h3>Showing {{ state.players[myId].name }}'s hand</h3> -->
