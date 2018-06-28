@@ -19,7 +19,7 @@ export class GameroomComponent implements OnInit {
   isActive = false;
   curround_card_value: number;
   winner: any;
-
+  display_selected:any;
 
   constructor(private _httpService: HttpService, private _router: Router) {
     _httpService.allPlayers$.subscribe(data => {
@@ -65,6 +65,7 @@ export class GameroomComponent implements OnInit {
   ngOnInit() {
     this.name = prompt('What is your name?')
     this.addPlayer(this.name);
+    this.display_selected = {};
   }
   addPlayer(name){
     this._httpService.addPlayer(name);
@@ -86,18 +87,20 @@ export class GameroomComponent implements OnInit {
   selectCard(id){
     let in_selected = false;
     for(var i of this.selected_cards){
+      console.log("i:",i);
       if (i == id){
-        in_selected = true;
+        in_selected = true;this.display_selected[id]=true;
       }
     }
     if(in_selected){
       var index = this.selected_cards.indexOf(id)
       if(index > -1){
-        this.selected_cards.splice(index, 1)
+        this.selected_cards.splice(index, 1);
+        this.display_selected[id] = false;
       }
       console.log('removed card from selected. updated selection: ', this.selected_cards)
     } else {
-      this.selected_cards.push(id);
+      this.selected_cards.push(id);this.display_selected[id] = true;
       console.log('Ive selected these cards: ', this.selected_cards)
     }
   }
