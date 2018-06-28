@@ -18,9 +18,12 @@ export class GameroomComponent implements OnInit {
   isActive = false;
   curround_card_value: number;
   winner: any;
-  display_selected: any;
   player_hand: any;
   play_history = [];
+
+
+  display_selected:any;
+  card_names = ['dummy','aces','twos','threes','fours','fives','sixs','sevens','eights','nines','tens','jacks','queens','kings'];
 
 
   constructor(private _httpService: HttpService, private _router: Router) {

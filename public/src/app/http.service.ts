@@ -52,6 +52,12 @@ export class HttpService {
   }
   getState() {
     this.socket.on('game_state', function(state) {
+      for(let player of state.players){
+        if(this.id = player.socketid){
+          var temphand = player.hand.slice(0)
+          player.hand = temphand.sort((a,b)=>a.value - b.value)
+        }
+      }
       this.gameStateSource.next(state);
       this.winSource.next(state.winner);
       this.winner = state.winner; // part of showing stats
