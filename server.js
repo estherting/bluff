@@ -171,7 +171,11 @@ io.on('connection',function(socket){
         bluff.state.active_player = (bluff.state.active_player + 1) % bluff.state.players.length
         io.emit("game_state",bluff.state)
     })
+    
 
+    //seems like a lot of problems occur here in the disconnect
+    //a quick fix would be to just set the active_player to the player at index 0
+    //instead of trying to do the next player
     socket.on('disconnect',function(){
         for(let i in bluff.state.players){
             if(bluff.state.players[i].socketid == socket.id){
