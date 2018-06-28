@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as THREE from '../../assets/build/three';
+import { HttpService } from '../http.service';
 
 
 @Component({
@@ -8,8 +9,13 @@ import * as THREE from '../../assets/build/three';
   styleUrls: ['./splash.component.css']
 })
 export class SplashComponent implements OnInit {
+  playerName = "";
+  socketId = "";
+  allPlayers = [];
+  joined = false;
+  isLeader = false;
   /* table:any;
-				
+
   camera:any
   scene:any
   renderer:any;
@@ -17,7 +23,24 @@ export class SplashComponent implements OnInit {
 
   objects:any;
   targets:any; */
-  constructor() { }
+  constructor(private _httpService: HttpService) {
+    _httpService.allPlayers$.subscribe(players => {
+      console.log('inside allplayers subscription')
+      this.allPlayers = players;
+      for (const i in this.allPlayers) {
+        if (this.allPlayers[i].name == this.playerName) {
+          this.socketId = this.allPlayers[i]['socketid'];
+        }
+      }
+      // Am I the leader?
+      if(this.allPlayers.length) {
+        if (this.allPlayers[0]['socketid'] == this.socketId) {
+          this.isLeader = true;
+        }
+        console.log('am I the leader?', this.isLeader)
+      }
+    })
+  }
 
   ngOnInit() {
    /*  this.table = [];
@@ -27,5 +50,8 @@ export class SplashComponent implements OnInit {
 		this.animate(); */
   }
  /*  */
-
+  joinGame(){
+    this.joined = true;
+    this._httpService.addPlayer(this.playerName);
+  }
 }

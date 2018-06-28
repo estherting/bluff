@@ -20,7 +20,7 @@
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
-    </div><div 
+    </div><div
     id="p2">
         <div id="cards" [ngClass]="{'current-player': ((1 + myId) % state.players.length == state.active_player)}">
             <div class="player-info">
@@ -32,7 +32,7 @@
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         </div>
-    </div><div            
+    </div><div
     id="table">
         <div id="cards">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
@@ -52,12 +52,15 @@
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
         </div>
+
+
     </div><div *ngIf="state.gameon" id="current-info">
         <p *ngIf="curround_card_value">Now playing {{ card_names[curround_card_value] }}...</p>
         <p *ngIf="!curround_card_value">Waiting for a card to be selected...</p>
       </div>            
+
     <div id="hand">
-        <img *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
+        <img *ngFor="let card of player_hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
       <!-- <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">
         <p>{{ card.name }} of {{ card.suit }} - {{ card.img }}</p>
       </div> -->
@@ -80,10 +83,13 @@
       <option value="13">King</option>
     </select>
       <button (click)="play()" [disabled]="!isActive" data-icon="♚" class="button button-green">Play</button>
-      <button (click)="callBluff()" data-icon="♛" class="button button-red">Call bluff</button>
+      <button (click)="callBluff()" [disabled]="!isActive" data-icon="♛" class="button button-red">Call bluff</button>
       <button (click)="pass()" [disabled]="!isActive" class="button button-blue" >Pass</button>
 
       <!-- <h3>Showing {{ state.players[myId].name }}'s hand</h3> -->
     </div>
+  </div>
+  <div class="playhistory">
+    <p *ngFor = 'let play of play_history'> {{ play['message']  }}</p>
   </div>
 </div>

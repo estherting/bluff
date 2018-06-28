@@ -12,15 +12,22 @@ export class HttpService {
   private allPlayersSource = new Subject<any>();
   private gameStateSource = new Subject<any>();
   private winSource = new Subject<any>();
+
   allPlayers$ = this.allPlayersSource.asObservable();
   gameState$ = this.gameStateSource.asObservable();
   win$ = this.winSource.asObservable();
+
   id: any;
   winner: any;  // for showing stats
+  playersList: any;
 
 
   constructor(private _http: HttpClient) {
     this.socket = io();
+    this.socket.on('player_list', function(data) {
+      console.log('got our player list: ', data);
+      this.allPlayersSource.next(data);
+    }.bind(this));
   }
 
   addPlayer(name) {
@@ -29,11 +36,6 @@ export class HttpService {
       this.id = socketid;
       console.log(this.id);
     });
-
-    this.socket.on('player_list', function(data) {
-      console.log('got our player list: ', data);
-      this.allPlayersSource.next(data);
-    }.bind(this));
   }
 
   startGame() {
@@ -59,6 +61,7 @@ export class HttpService {
       this.gameStateSource.next(state);
       this.winSource.next(state.winner);
       this.winner = state.winner; // part of showing stats
+      this.playersList = state.players;  // for splash screen players list
       console.log('in the service, i am setting winner', this.winSource);
     }.bind(this));
   }

@@ -9,29 +9,31 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class GameroomComponent implements OnInit {
   name = '';
-  myId: number;
   socketId: string;
   allPlayers = [];
   isLeader = false;
   selected_cards = [];
   choosen_card = 1;
-  state = {players: [{name: '', hand: []}, {name: '', hand: []}, {name: '', hand: []}, {name: '', hand: []}]};
+  state = {active_player: 0, players: [{name: '', hand: []}, {name: '', hand: []}, {name: '', hand: []}, {name: '', hand: []}]};
   isActive = false;
   curround_card_value: number;
   winner: any;
+  player_hand: any;
+  play_history = [];
+
+
   display_selected:any;
   card_names = ['dummy','aces','twos','threes','fours','fives','sixs','sevens','eights','nines','tens','jacks','queens','kings'];
+
 
   constructor(private _httpService: HttpService, private _router: Router) {
     _httpService.allPlayers$.subscribe(data => {
       this.allPlayers = data;
       for (const i in this.allPlayers) {
         if (this.allPlayers[i].name == this.name) {
-          this.myId = Number(i);
           this.socketId = this.allPlayers[i]['socketid'];
         }
       }
-      console.log('my ID is: ', this.myId);
       console.log('my SocketID is: ', this.socketId);
       // am I the leader?
       if (this.allPlayers[0]['socketid'] == this.socketId) {
@@ -41,6 +43,12 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
+      this.play_history = state['game_history'];
+      for (const player of this.state.players) {
+        if (player['socketid'] == this.socketId) {
+          this.player_hand = player.hand;
+        }
+      }
       // is there a winner?
       if (state.winner) {
         console.log('WE GOT A WINNER!!!!!', state.winner);
@@ -48,7 +56,7 @@ export class GameroomComponent implements OnInit {
         this._router.navigate(['/stats']);
       }
       // am I the active player?
-      if (this.state['active_player'] == this.myId) {
+      if (this.state.players[this.state['active_player']]['socketid'] == this.socketId) {
         this.isActive = true;
       } else {
         this.isActive = false;
@@ -90,18 +98,18 @@ export class GameroomComponent implements OnInit {
     for(var i of this.selected_cards){
       console.log("i:",i);
       if (i == id){
-        in_selected = true;this.display_selected[id]=true;
+        in_selected = true;this.display_selected[id] = true;
       }
     }
-    if(in_selected){
+    if (in_selected){
       var index = this.selected_cards.indexOf(id)
-      if(index > -1){
+      if (index > -1){
         this.selected_cards.splice(index, 1);
         this.display_selected[id] = false;
       }
       console.log('removed card from selected. updated selection: ', this.selected_cards);
     } else {
-      this.selected_cards.push(id);this.display_selected[id] = true;
+      this.selected_cards.push(id); this.display_selected[id] = true;
       console.log('Ive selected these cards: ', this.selected_cards)
     }
   }
@@ -111,5 +119,4 @@ export class GameroomComponent implements OnInit {
     this.selected_cards = [];
     this._httpService.getState();
   }
-
 }
