@@ -11,8 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./splash.component.css']
 })
 export class SplashComponent implements OnInit {
-  playerName = "";
-  socketId = "";
+  playerName = '';
+  socketId = '';
   allPlayers = [];
   joined = false;
   isLeader = false;
@@ -38,18 +38,18 @@ export class SplashComponent implements OnInit {
         }
       }
       // Am I the leader?
-      if(this.allPlayers.length) {
+      if (this.allPlayers.length) {
         if (this.allPlayers[0]['socketid'] == this.socketId) {
           this.isLeader = true;
         }
-        console.log('am I the leader?', this.isLeader)
+        console.log('am I the leader?', this.isLeader);
       }
-    })
+    });
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
-      if(state.gameon){
-        _router.navigate(['/gameroom'])
+      if (state.gameon) {
+        _router.navigate(['/gameroom']);
       }
     });
   }
@@ -62,7 +62,7 @@ export class SplashComponent implements OnInit {
 		this.animate(); */
   }
  /*  */
-  joinGame(){
+  joinGame() {
     this.joined = true;
     this._httpService.addPlayer(this.playerName);
   }

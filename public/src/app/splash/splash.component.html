@@ -3,7 +3,7 @@
   <img src="../../assets/images/aces.png" alt="">
   <form class="" action="index.html" method="post">
     Your name:
-    <input type="text" name= "playerName" [(ngModel)]="playerName">
+    <input type="text" [disabled] = "joined" name= "playerName" [(ngModel)]="playerName">
     <button id="join-button" (click)="joinGame()" *ngIf="!joined">Join!</button>
     <p *ngIf="joined" class="waiting-msg">Waiting for other players...</p>
   </form>
