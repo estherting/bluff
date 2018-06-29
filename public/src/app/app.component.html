@@ -1,4 +1,7 @@
 
 <div class="container">
-  <router-outlet></router-outlet>
+<!--   <router-outlet></router-outlet> -->
+  <app-splash  [hidden] = "showSplash" (startEvent) = "startGame()"></app-splash>
+  <app-gameroom *ngIf = "showGame" [hidden] = "!showGame" ></app-gameroom>
+  <!-- <app-stats [hidden] = "showStats" ></app-stats> -->
 </div>

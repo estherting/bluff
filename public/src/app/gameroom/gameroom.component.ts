@@ -29,6 +29,8 @@ export class GameroomComponent implements OnInit {
 
 
   constructor(private _httpService: HttpService, private _router: Router) {
+
+    this._httpService.startGame();
     this._httpService.getState();
     this.state = this._httpService.state;
     _httpService.allPlayers$.subscribe(data => {
@@ -92,7 +94,7 @@ export class GameroomComponent implements OnInit {
   }
 
   ngOnInit() {
-    // have the server emit game state
+/*     // have the server emit game state
     this.state = this._httpService.state;
     console.log('i got my state from service', this.state);
     this.play_history = [];
@@ -128,7 +130,7 @@ export class GameroomComponent implements OnInit {
     } else {
       this.curround_card_value = null;
     }
-    this.display_selected = {};
+    this.display_selected = {}; */
 
   }
   addPlayer(name) {

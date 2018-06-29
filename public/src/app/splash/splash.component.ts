@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output , EventEmitter} from '@angular/core';
 import * as THREE from '../../assets/build/three';
 import { HttpService } from '../http.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./splash.component.css']
 })
 export class SplashComponent implements OnInit {
+  @Output() startEvent = new EventEmitter();
   playerName = '';
   socketId = '';
   allPlayers = [];
@@ -29,6 +30,13 @@ export class SplashComponent implements OnInit {
   objects:any;
   targets:any; */
   constructor(private _httpService: HttpService, private _router: Router) {
+    this.playerName = '';
+    this.socketId = '';
+    this.allPlayers = [];
+    this.joined = false;
+    this.isLeader = false;
+    this.gameStarted = false;
+    this.state = null;
     _httpService.allPlayers$.subscribe(players => {
       console.log('inside allplayers subscription')
       this.allPlayers = players;
@@ -45,13 +53,13 @@ export class SplashComponent implements OnInit {
         console.log('am I the leader?', this.isLeader);
       }
     });
-    _httpService.gameState$.subscribe(state => {
+/*     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
-      if (state.gameon) {
+       if (state.gameon) {
         _router.navigate(['/gameroom']);
-      }
-    });
+      } 
+    }); */
   }
 
   ngOnInit() {
@@ -67,7 +75,7 @@ export class SplashComponent implements OnInit {
     this._httpService.addPlayer(this.playerName);
   }
   startGame() {
-    this._httpService.startGame();
+    this.startEvent.emit();
   }
 
   // ngOnDestroy(){

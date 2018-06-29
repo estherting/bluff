@@ -9,4 +9,15 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  showSplash = false;
+  showGame = false;
+  showStats = true;
+
+  startGame() {
+    console.log("AppComponent:", this.showSplash);
+
+    this.showSplash = true;
+    console.log("AppComponent:", this.showSplash);
+    this.showGame = true;
+  }
 }
