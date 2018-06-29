@@ -132,6 +132,9 @@ class Bluff {
         for(let player of this.state.players){
             player.drophand();
         }
+        while ( this.state.watchers.length > 0) {
+            this.state.players.push(this.state.watchers.pop());
+        }
     }
 
 }

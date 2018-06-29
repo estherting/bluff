@@ -243,6 +243,9 @@ io.on('connection',function(socket){
         }
         //initial attempt to deal with players leaving early
         if(bluff.state.gameon){
+            if (bluff.state.players.length == 0 ) {
+                bluff.endGame();
+            }
             io.emit("game_state",bluff.state)
         }else{
             io.emit("player_list",bluff.state.players)

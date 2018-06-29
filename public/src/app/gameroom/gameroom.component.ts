@@ -72,6 +72,9 @@ export class GameroomComponent implements OnInit {
         this.winner = state.winner;
         this._router.navigate(['/stats']);
       }
+      if (!state.gameon && !state.winner) {
+        this._router.navigate(['/splash']);
+      }
       // am I the active player?
       if (this.state.players[this.state['active_player']]['socketid'] == this.socketId) {
         this.isActive = true;
