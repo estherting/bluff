@@ -118,18 +118,19 @@ class Bluff {
     }
     endGame(){
         this.startid = 0;
-        this.deck = null
-        this.state.curround_plays=[]
+        this.deck = null;
+        this.state.curround_plays=[];
         this.state.most_recent_hand = {
             isbluff: false,
             cards:[],
             player:null
         }
-        this.state.curround_card_value = null
-        this.state.gameon = false
-        this.state.active_player = null
+        this.state.curround_card_value = null;
+        this.state.gameon = false;
+        this.state.game_history = [];
+        this.state.active_player = null;
         for(let player of this.state.players){
-            player.drophand()
+            player.drophand();
         }
     }
 
