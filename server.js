@@ -23,7 +23,8 @@ app.all("*", (req,res,next) => {
   res.sendFile(path.resolve("./public/dist/public/index.html"))
 });
 
-
+var card_names = ['dummy', 'aces', 'twos', 'threes', 'fours', 'fives', 'sixs', 'sevens', 'eights', 'nines', 'tens', 'jacks',
+    'queens', 'kings'];
 var bluff = new Bluff()
 // var recent_hand = bluff.state.most_recent_hand
 // var state = bluff.state
@@ -209,7 +210,7 @@ io.on('connection',function(socket){
         bluff.state.most_recent_hand.player = bluff.state.active_player
         bluff.state.curround_plays.push(bluff.state.most_recent_hand)
         let message = bluff.state.players[bluff.state.active_player].name + ' has played ';
-        message = message + data.selected_cards.length + ' ' + bluff.state.curround_card_value;
+        message = message + data.selected_cards.length + ' ' + card_names[bluff.state.curround_card_value];
         let game_hist = {
             message: message
         }
