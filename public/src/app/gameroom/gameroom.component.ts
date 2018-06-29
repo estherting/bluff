@@ -50,6 +50,7 @@ export class GameroomComponent implements OnInit {
     _httpService.gameState$.subscribe(state => {
       console.log('subscribing to game state', state);
       this.state = state;
+      this.play_history = [];
       for (let i = (state['game_history'].length - 1) ;  i >= 0 ; i--) {
         this.play_history.push(state['game_history'][i]);
       }
