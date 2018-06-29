@@ -84,8 +84,8 @@ io.on('connection',function(socket){
             message: message
         }
         bluff.state.game_history.push(game_hist);
-        for(let player of bluff.state.players){
-            let message = player.name + ' is playing';
+        for(let i =  bluff.state.players.length -1; i >= 0; i--) {
+            let message = bluff.state.players[i].name + ' is playing';
             let game_hist = {
                 message: message
             }

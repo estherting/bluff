@@ -95,6 +95,10 @@ export class GameroomComponent implements OnInit {
     // have the server emit game state
     this.state = this._httpService.state;
     console.log('i got my state from service', this.state);
+    this.play_history = [];
+    for (let i = (this.state['game_history'].length - 1); i >= 0; i--) {
+      this.play_history.push(this.state['game_history'][i]);
+    }
     this.socketId = this._httpService.id;
     console.log('my id is: ', this.socketId);
     for (const i in this.state['players']) {
