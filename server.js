@@ -67,9 +67,9 @@ io.on('connection',function(socket){
 
         //if there is only one player, make him the leader
         // -----------------------> i think this code here might be breaking the game
-        if(bluff.state.players.length && bluff.state.players[0].socketid == socket.id){
+/*         if(bluff.state.players.length && bluff.state.players[0].socketid == socket.id){
             socket.emit("isleader","hey you are the leader of this game")
-        }
+        } */
     })
     //When the leader of the game clicks startgame run the start method of bluff
     //  --will make a new deck and shuffle it
@@ -106,7 +106,7 @@ io.on('connection',function(socket){
         let losershand = [];
         if(bluff.state.most_recent_hand.isbluff){
             losershand = bluff.state.players[bluff.state.most_recent_hand.player].hand
-            let message = bluff.state.players[bluff.state.most_recent_hand.player].name + ' was called out on his bluff';
+            let message = bluff.state.players[bluff.state.most_recent_hand.player].name + ' was called out on the bluff';
             let game_hist = {
                 message: message
             }
@@ -142,9 +142,9 @@ io.on('connection',function(socket){
             bluff.endGame()
             io.emit("player_list",bluff.state.players)
             //marked for later
-            if(bluff.state.players[0]){
+/*             if(bluff.state.players[0]){
                 socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
-            }
+            } */
         }else{
             io.emit("game_state",bluff.state)
         }
@@ -175,9 +175,9 @@ io.on('connection',function(socket){
                 bluff.endGame()
                 io.emit("player_list",bluff.state.players)
                 //marked for later observation
-                if(bluff.state.players[0]){
+/*                 if(bluff.state.players[0]){
                     socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
-                }
+                } */
             }else{
                 io.emit("game_state",bluff.state)
             }
@@ -228,7 +228,6 @@ io.on('connection',function(socket){
             if(bluff.state.players[i].socketid == socket.id){
                 if(bluff.state.active_player == i){
                     bluff.state.active_player = (bluff.state.active_player +1) % (bluff.state.players.length -1)
-
                 }
 
                 let message = bluff.state.players.splice(i, 1)[0].name + ' has left the game';
@@ -236,9 +235,9 @@ io.on('connection',function(socket){
                     message: message
                 }
                 bluff.state.game_history.push(game_hist);
-                if(i == 0 && !bluff.state.gameon){
+/*                 if(i == 0 && !bluff.state.gameon){
                     socket.broadcast.to(bluff.state.players[0].socketid).emit("isleader","hey you are the leader of this game")
-                }
+                } */
                 break;
             }
         }
