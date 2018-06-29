@@ -13,7 +13,7 @@
     <p *ngFor="let player of allPlayers">{{ player.name }}</p>
   </div>
 
-  <a *ngIf="isLeader" (click)="startGame()" [routerLink]="['/gameroom']" class="enter-game button button-red"  data-icon="♚">Play!</a>
+  <a *ngIf="isLeader" (click)="startGame()" class="enter-game button button-red"  data-icon="♚">Play!</a>
 </div>
 
 

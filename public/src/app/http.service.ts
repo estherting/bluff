@@ -16,7 +16,7 @@ export class HttpService {
   allPlayers$ = this.allPlayersSource.asObservable();
   gameState$ = this.gameStateSource.asObservable();
   win$ = this.winSource.asObservable();
-
+  state: any;
   id: any;
   winner: any;  // for showing stats
   playersList: any;
@@ -24,9 +24,26 @@ export class HttpService {
 
   constructor(private _http: HttpClient) {
     this.socket = io();
+
     this.socket.on('player_list', function(data) {
       console.log('got our player list: ', data);
       this.allPlayersSource.next(data);
+    }.bind(this));
+
+    this.socket.on('game_state', function(state) {
+      console.log('getting game state in SERVICE!')
+      this.state = state;
+      for(let player of state.players){
+        if(this.id == player.socketid){
+          var temphand = player.hand.slice(0)
+          player.hand = temphand.sort((a,b)=>a.value - b.value)
+        }
+      }
+      this.gameStateSource.next(state);
+      this.winSource.next(state.winner);
+      this.winner = state.winner; // part of showing stats
+      this.playersList = state.players;  // for splash screen players list
+      console.log('in the service, i am setting winner', this.winSource);
     }.bind(this));
   }
 
@@ -53,7 +70,7 @@ export class HttpService {
   getState() {
     this.socket.on('game_state', function(state) {
       for(let player of state.players){
-        if(this.id = player.socketid){
+        if(this.id == player.socketid){
           var temphand = player.hand.slice(0)
           player.hand = temphand.sort((a,b)=>a.value - b.value)
         }

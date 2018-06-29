@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as THREE from '../../assets/build/three';
 import { HttpService } from '../http.service';
+import { ActivatedRoute, Router } from '@angular/router';
+// import { ISubscription } from "rxjs/Subscription";
 
 
 @Component({
@@ -15,6 +17,8 @@ export class SplashComponent implements OnInit {
   joined = false;
   isLeader = false;
   gameStarted = false;
+  state: any;
+  // private gameSub: ISubscription;
   /* table:any;
 
   camera:any
@@ -24,7 +28,7 @@ export class SplashComponent implements OnInit {
 
   objects:any;
   targets:any; */
-  constructor(private _httpService: HttpService) {
+  constructor(private _httpService: HttpService, private _router: Router) {
     _httpService.allPlayers$.subscribe(players => {
       console.log('inside allplayers subscription')
       this.allPlayers = players;
@@ -41,6 +45,13 @@ export class SplashComponent implements OnInit {
         console.log('am I the leader?', this.isLeader)
       }
     })
+    _httpService.gameState$.subscribe(state => {
+      console.log('subscribing to game state', state);
+      this.state = state;
+      if(state.gameon){
+        _router.navigate(['/gameroom'])
+      }
+    });
   }
 
   ngOnInit() {
@@ -56,8 +67,10 @@ export class SplashComponent implements OnInit {
     this._httpService.addPlayer(this.playerName);
   }
   startGame() {
-    // this.isLeader = false;
     this._httpService.startGame();
-    this._httpService.getState();
   }
+
+  // ngOnDestroy(){
+  //   this.gameSub.unsubscribe()
+  // }
 }
