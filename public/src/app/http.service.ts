@@ -31,12 +31,12 @@ export class HttpService {
     }.bind(this));
 
     this.socket.on('game_state', function(state) {
-      console.log('getting game state in SERVICE!')
+      console.log('getting game state in SERVICE!');
       this.state = state;
-      for(let player of state.players){
-        if(this.id == player.socketid){
-          var temphand = player.hand.slice(0)
-          player.hand = temphand.sort((a,b)=>a.value - b.value)
+      for (const player of state.players) {
+        if (this.id === player.socketid) {
+          const temphand = player.hand.slice(0);
+          player.hand = temphand.sort((a, b) => a.value - b.value);
         }
       }
       this.gameStateSource.next(state);
@@ -69,10 +69,10 @@ export class HttpService {
   }
   getState() {
     this.socket.on('game_state', function(state) {
-      for(let player of state.players){
-        if(this.id == player.socketid){
-          var temphand = player.hand.slice(0)
-          player.hand = temphand.sort((a,b)=>a.value - b.value)
+      for (const player of state.players) {
+        if (this.id === player.socketid) {
+          const temphand = player.hand.slice(0);
+          player.hand = temphand.sort((a, b) => a.value - b.value);
         }
       }
       this.gameStateSource.next(state);

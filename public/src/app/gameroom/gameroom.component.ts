@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./gameroom.component.css']
 })
 export class GameroomComponent implements OnInit {
-  name = "";
+  name = '';
   myId: number;
   socketId: string;
   allPlayers = [];
@@ -32,7 +32,7 @@ export class GameroomComponent implements OnInit {
     this._httpService.getState();
     this.state = this._httpService.state;
     _httpService.allPlayers$.subscribe(data => {
-      console.log('I am in allPlayers subscription')
+      console.log('I am in allPlayers subscription');
       this.allPlayers = data;
       // what is my name?
       for (const i in this.allPlayers) {
@@ -58,7 +58,7 @@ export class GameroomComponent implements OnInit {
       for (const player of this.state.players) {
         if (player['socketid'] == this.socketId) {
           this.player_hand = player.hand;
-          console.log('my hand: ', this.player_hand)
+          console.log('my hand: ', this.player_hand);
         }
       }
       // is there a winner?
@@ -91,15 +91,15 @@ export class GameroomComponent implements OnInit {
   ngOnInit() {
     // have the server emit game state
     this.state = this._httpService.state;
-    console.log('i got my state from service', this.state)
+    console.log('i got my state from service', this.state);
     this.socketId = this._httpService.id;
     console.log('my id is: ', this.socketId);
-    for(let i in this.state['players']){
-      if (this.socketId == this.state['players'][i].socketid){
+    for (const i in this.state['players']) {
+      if (this.socketId == this.state['players'][i].socketid) {
         this.myId = Number(i); // set myId
         this.player_hand = this.state['players'][i].hand; // set hand
         this.name = this.state['players'][i].name;
-        console.log('my hand: ', this.player_hand)
+        console.log('my hand: ', this.player_hand);
       }
     }
     // is there a winner?
