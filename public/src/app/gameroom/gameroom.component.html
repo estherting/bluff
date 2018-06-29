@@ -33,17 +33,26 @@
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
 
             </div>
-        </div><div
-        id="table">
-            <div id="cards">
-                <div id="pile"><p>Number of cards: {{cards_in_pile}}</p></div>
-                <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
-                <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
-                <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
-                <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
-            </div>
-        </div><div
-        id="p3">
+        </div>
+        <div class="middlesection">
+          <div  class="current-info" *ngIf="state.gameon" >
+            <p *ngIf="play_history[0]">{{ play_history[0]['message'] }}</p>
+          </div>
+          <div class="middlesection" id="table">
+              <div id="cards">
+                  <div id="pile"><p>Number of cards: {{cards_in_pile}}</p></div>
+                  <img src="../../assets/images/red_back.png" alt="" style="margin-left:0px">
+                  <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+                  <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+                  <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+              </div>
+          </div> 
+          <div class=" current-info" *ngIf="state.gameon" >
+            <p *ngIf="curround_card_value">Now playing {{ card_names[curround_card_value] }}...</p>
+            <p *ngIf="!curround_card_value">Waiting for a card to be selected...</p>
+          </div>
+        </div>
+        <div id="p3">
             <div id="cards" [ngClass]="{'current-player': ((3 + myId) % state.players.length == state.active_player)}">
                 <div class="player-info">
                   <p>{{ state.players[(3 + myId) % state.players.length].name }}</p>
@@ -55,11 +64,7 @@
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             </div>
         </div>
-      </div>
-        <div *ngIf="state.gameon" id="current-info">
-          <p *ngIf="curround_card_value">Now playing {{ card_names[curround_card_value] }}...</p>
-          <p *ngIf="!curround_card_value">Waiting for a card to be selected...</p>
-        </div>            
+      </div>         
 
 
       <div id="hand">
