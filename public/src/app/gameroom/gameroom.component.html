@@ -63,7 +63,7 @@
 
 
       <div id="hand">
-          <img *ngFor="let card of player_hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
+          <img *ngFor="let card of player_hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true,'highlight':isActive == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
         <!-- <div *ngFor="let card of state.players[myId].hand" class="card" id="{{card.cardid}}" (click)="selectCard(card.cardid)">
           <p>{{ card.name }} of {{ card.suit }} - {{ card.img }}</p>
         </div> -->
