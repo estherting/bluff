@@ -23,7 +23,7 @@ export class GameroomComponent implements OnInit {
   player_hand: any;
   play_history = [];
   display_selected: any;
-  card_names = ['dummy', 'aces', 'twos', 'threes', 'fours', 'fives', 'sixs', 'sevens', 'eights', 'nines', 'tens', 'jacks',
+  card_names = ['dummy', 'aces', 'twos', 'threes', 'fours', 'fives', 'sixes', 'sevens', 'eights', 'nines', 'tens', 'jacks',
       'queens', 'kings'];
   cards_in_pile: number;
 
