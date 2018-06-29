@@ -1,7 +1,4 @@
 <div id="main">
-  <div class="announce-join">
-    <p>{{allPlayers[allPlayers.length-1]['name']}} joined the game</p>
-  </div>
 
   <div id="nav">
     <h1>Welcome {{name}}!</h1>
@@ -11,6 +8,7 @@
   </div>
   <div class="main-content">
     <div class="gameboard">
+
 
       <div id="p1" [ngClass]="{'current-player': ((2 + myId) % state.players.length == state.active_player)}">
           <div class="player-info">
@@ -33,6 +31,7 @@
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
+
             </div>
         </div><div
         id="table">
@@ -55,14 +54,13 @@
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
                 <img src="../../assets/images/red_back.png" alt="" style="margin-left:-78px">
             </div>
-
-
         </div>
       </div>
         <div *ngIf="state.gameon" id="current-info">
           <p *ngIf="curround_card_value">Now playing {{ card_names[curround_card_value] }}...</p>
           <p *ngIf="!curround_card_value">Waiting for a card to be selected...</p>
         </div>            
+
 
       <div id="hand">
           <img *ngFor="let card of player_hand" class="card" id="{{card.cardid}}" [ngClass]="{'make-bigger':display_selected[card.cardid] == true}" (click)="selectCard(card.cardid)" src="../../assets/images/{{card.img}}.png" style="margin-left:-80px">
